@@ -2,6 +2,8 @@ import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
+import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
+import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,7 +14,10 @@ async function bootstrap() {
     defaultVersion: [VERSION_NEUTRAL, '1', '2'], // 配置多版本
     type: VersioningType.URI
   })
+  // 配置全局正常返回参数
   app.useGlobalInterceptors(new TransformInterceptor());
+  // 异常过滤器
+  app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
   await app.listen(3000);
 }
 bootstrap();
