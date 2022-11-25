@@ -19,14 +19,18 @@ export class TransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<Response<T>> {
+    // console.log('执行拦截器')
     return next.handle().pipe(
-      map((data) => ({
-        data,
-        status: 0,
-        extra: {},
-        message: 'success',
-        success: true,
-      })),
+      map((data) => {
+        // console.log('执行拦截器end')
+        return {
+          data,
+          status: 0,
+          extra: {},
+          message: 'success',
+          success: true,
+        }
+      }),
     );
   }
 }
